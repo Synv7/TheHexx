@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&amp;family=Creepster&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<style>
+  html,body{margin:0;padding:0;background:#08070b;overflow:hidden;}
+  @keyframes hexFlickerHard{
+    0%,12%,16%,40%,42%,60%,64%,100%{opacity:1;text-shadow:0 0 6px rgba(255,255,255,.35),0 0 26px rgba(200,19,28,.95),0 0 60px rgba(200,19,28,.6),0 0 110px rgba(123,47,176,.7);}
+    14%,41%,62%{opacity:.55;text-shadow:0 0 2px rgba(200,19,28,.3);}
+    15%{opacity:.15;text-shadow:none;}
+  }
+  @keyframes emberPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+  /* Responsive overrides (inline styles set the desktop base; these adjust at breakpoints) */
+  @media (max-width:760px){
+    #hexHero{font-size:clamp(46px,15vw,120px) !important; white-space:normal !important; line-height:.82 !important;}
+    #hexDial{max-width:560px !important;}
+    #hexFoot{max-width:560px !important;}
+  }
+  @media (max-width:520px){
+    #hexWrap{padding:26px 18px !important;}
+    #hexEyebrow{font-size:16px !important; letter-spacing:.2em !important; text-indent:.2em !important;}
+    #hexHero{font-size:clamp(44px,17vw,96px) !important;}
+    #hexDesc{font-size:14px !important; line-height:1.65 !important;}
+    #hexFoot{flex-direction:column !important; gap:18px !important;}
+  }
+  @media (max-height:620px) and (min-width:761px){
+    #hexHero{font-size:clamp(40px,9vw,110px) !important;}
+    #hexDial{margin-bottom:14px !important;}
+  }
+</style>
+</helmet>
+
+<div style="position:relative; width:100vw; height:100vh; overflow:hidden; background:#08070b;" data-screen-label="The Hex — Coming Soon">
+  <canvas id="hexx-canvas" style="position:absolute; inset:0; width:100%; height:100%; display:block;"></canvas>
+  <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 80% at 50% 26%, rgba(123,47,176,.18) 0%, rgba(20,8,26,0) 54%), linear-gradient(180deg, rgba(6,4,8,.12) 0%, rgba(6,4,8,.28) 62%, rgba(4,2,5,.78) 100%);"></div>
+
+  <div id="hexWrap" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; padding:clamp(28px,5vh,64px) clamp(24px,5vw,72px);">
+    <div id="hexEyebrow" style="display:flex; align-items:center; gap:14px; font-family:'Creepster',cursive; color:#c8131c; font-size:clamp(18px,2.4vw,26px); letter-spacing:.3em; text-indent:.3em; text-shadow:0 0 16px rgba(200,19,28,.55);">
+      <span style="display:inline-block; width:11px; height:11px; border-radius:50%; background:#c8131c; box-shadow:0 0 14px #c8131c; animation:emberPulse 1.6s infinite;"></span>ON&nbsp;AIR&nbsp;SOON
+    </div>
+
+    <div style="flex:.55;"></div>
+
+    
+
+    
+
+    <h1 style="font-family: 'Nosifer',cursive; color: #0c0a0c; font-size: clamp(52px,12vw,158px); line-height: .84; margin: 0; text-align: center; white-space: nowrap; -webkit-text-stroke: clamp(1.5px,.28vw,3px) #c8131c; animation: hexFlickerHard 4s infinite steps(1,end)" id="hexHero">THE HEXX</h1><div style="flex:1;"></div><div id="hexDesc" style="font-family:'Special Elite',monospace; color:#cfc7bb; font-size:clamp(14px,1.5vw,18px); letter-spacing:.06em; line-height:1.75; max-width:560px; text-align:center; margin:clamp(22px,3vh,34px) 0 0;">KHXX 103.1 FM · independent horror radio. Garage, surf, soul and the strange — tune the dead air and wait for the signal.</div>
+
+    <div id="hexDial" style="width:100%; max-width:780px; margin-bottom:clamp(20px,3vh,30px);">
+      <div style="position:relative; height:46px;">
+        <div style="position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:space-between;">
+          <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="41"><div style="width:1.5px; height:{{ t.h }}; background:{{ t.bg }};"></div></sc-for>
+        </div>
+        <div style="position:absolute; left:71%; bottom:0; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+          <span style="font-family:'Creepster',cursive; color:#c8131c; font-size:22px; text-shadow:0 0 14px rgba(200,19,28,.7); white-space:nowrap;">103.1</span>
+          <span style="width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:11px solid #c8131c; filter:drop-shadow(0 0 8px rgba(200,19,28,.8)); margin-top:3px;"></span>
+        </div>
+      </div>
+      <div style="height:2px; background:linear-gradient(90deg,rgba(200,19,28,0),rgba(200,19,28,.6) 12%,rgba(200,19,28,.6) 88%,rgba(200,19,28,0)); margin-top:2px;"></div>
+      <div style="display:flex; justify-content:space-between; font-family:'Special Elite',monospace; color:#6f675e; font-size:12px; letter-spacing:.1em; margin-top:9px;">
+        <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108&nbsp;MHz</span>
+      </div>
+    </div>
+
+    <div id="hexFoot" style="display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap; width:100%; max-width:780px;">
+      <div id="hexSocial" style="display:flex; gap:clamp(14px,2vw,24px); flex-wrap:wrap; justify-content:center; font-family:'Special Elite',monospace; font-size:13px; letter-spacing:.16em; text-transform:uppercase;">
+        <a href="#" style="color:#b9b1a6; text-decoration:none;" style-hover="color:#c8131c;">Instagram</a>
+        <a href="#" style="color:#b9b1a6; text-decoration:none;" style-hover="color:#c8131c;">Facebook</a>
+        <a href="#" style="color:#b9b1a6; text-decoration:none;" style-hover="color:#c8131c;">Bandcamp</a>
+        <a href="#" style="color:#b9b1a6; text-decoration:none;" style-hover="color:#c8131c;">Mixcloud</a>
+      </div>
+      
+    </div>
+  </div>
+
+  
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+class Component extends DCLogic {
+  state = { soundOn: false };
+
+  componentDidMount() {
+    this.engines = [];
+    this.waitForBabylon(0);
+  }
+  componentWillUnmount() {
+    try { this.stopSound(); } catch (e) {}
+    // Intentionally NOT disposing the Babylon engine here: the DC runtime may
+    // transiently unmount/remount, and disposing would kill the render loop and
+    // blank the canvas. The per-canvas guard in initScene prevents duplicates.
+  }
+
+  waitForBabylon(tries) {
+    if (window.BABYLON && document.getElementById('hexx-canvas')) {
+      try { this.initScene('hexx-canvas', { smoke: 0.8, embers: 1.0, bats: 6, tint: [0.55, 0.1, 0.7] }); } catch (e) {}
+    } else if (tries < 200) {
+      setTimeout(() => this.waitForBabylon(tries + 1), 80);
+    }
+  }
+
+  blobTex(scene) {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const x = c.getContext('2d');
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(.4, 'rgba(255,255,255,.4)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+    return new BABYLON.Texture(c.toDataURL(), scene);
+  }
+  emberTex(scene) {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const x = c.getContext('2d');
+    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,240,200,1)'); g.addColorStop(.3, 'rgba(255,150,60,.9)'); g.addColorStop(1, 'rgba(255,80,30,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    return new BABYLON.Texture(c.toDataURL(), scene);
+  }
+  batTex(scene) {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const x = c.getContext('2d');
+    x.fillStyle = '#000'; x.translate(64, 60);
+    x.beginPath(); x.moveTo(0, -8);
+    x.bezierCurveTo(6, -16, 10, -10, 16, -14);
+    x.bezierCurveTo(34, -26, 52, -18, 60, -6);
+    x.bezierCurveTo(46, -10, 40, -2, 30, -4);
+    x.bezierCurveTo(40, 4, 30, 14, 18, 12);
+    x.bezierCurveTo(10, 11, 6, 6, 0, 10);
+    x.bezierCurveTo(-6, 6, -10, 11, -18, 12);
+    x.bezierCurveTo(-30, 14, -40, 4, -30, -4);
+    x.bezierCurveTo(-40, -2, -46, -10, -60, -6);
+    x.bezierCurveTo(-52, -18, -34, -26, -16, -14);
+    x.bezierCurveTo(-10, -10, -6, -16, 0, -8);
+    x.closePath(); x.fill();
+    return new BABYLON.Texture(c.toDataURL(), scene);
+  }
+
+  initScene(canvasId, o) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    if (canvas.__hexEngine) return; // already initialised on this canvas node
+    const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: false, stencil: false }, true);
+    canvas.__hexEngine = engine;
+    const scene = new BABYLON.Scene(engine);
+    scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+    const cam = new BABYLON.FreeCamera('c', new BABYLON.Vector3(0, 0, -34), scene);
+    cam.setTarget(BABYLON.Vector3.Zero()); cam.fov = 0.82;
+
+    const smoke = new BABYLON.ParticleSystem('smoke', 600, scene);
+    smoke.particleTexture = this.blobTex(scene);
+    smoke.emitter = new BABYLON.Vector3(0, -16, 0);
+    smoke.minEmitBox = new BABYLON.Vector3(-30, -4, -6);
+    smoke.maxEmitBox = new BABYLON.Vector3(30, 2, 8);
+    smoke.color1 = new BABYLON.Color4(o.tint[0], o.tint[1], o.tint[2], 0.20);
+    smoke.color2 = new BABYLON.Color4(0.22, 0.2, 0.28, 0.16);
+    smoke.colorDead = new BABYLON.Color4(0, 0, 0, 0);
+    smoke.minSize = 9; smoke.maxSize = 22;
+    smoke.minLifeTime = 9; smoke.maxLifeTime = 18;
+    smoke.emitRate = 14 * o.smoke;
+    smoke.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
+    smoke.gravity = new BABYLON.Vector3(0, 0.45, 0);
+    smoke.direction1 = new BABYLON.Vector3(-1.4, 1, 0);
+    smoke.direction2 = new BABYLON.Vector3(1.4, 1.6, 0);
+    smoke.minAngularSpeed = -0.25; smoke.maxAngularSpeed = 0.25;
+    smoke.minEmitPower = 0.3; smoke.maxEmitPower = 0.9;
+    smoke.updateSpeed = 0.012; smoke.start();
+
+    const emb = new BABYLON.ParticleSystem('emb', 400, scene);
+    emb.particleTexture = this.emberTex(scene);
+    emb.emitter = new BABYLON.Vector3(0, -16, 2);
+    emb.minEmitBox = new BABYLON.Vector3(-28, -2, -2);
+    emb.maxEmitBox = new BABYLON.Vector3(28, 0, 4);
+    emb.color1 = new BABYLON.Color4(1, 0.5, 0.18, 0.9);
+    emb.color2 = new BABYLON.Color4(0.85, 0.1, 0.12, 0.8);
+    emb.colorDead = new BABYLON.Color4(0.4, 0.05, 0.05, 0);
+    emb.minSize = 0.12; emb.maxSize = 0.5;
+    emb.minLifeTime = 4; emb.maxLifeTime = 9;
+    emb.emitRate = 26 * o.embers;
+    emb.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
+    emb.gravity = new BABYLON.Vector3(0, 1.1, 0);
+    emb.direction1 = new BABYLON.Vector3(-0.6, 1, 0);
+    emb.direction2 = new BABYLON.Vector3(0.6, 1.5, 0);
+    emb.minEmitPower = 0.5; emb.maxEmitPower = 1.4;
+    emb.updateSpeed = 0.014; emb.start();
+
+    const bats = new BABYLON.ParticleSystem('bats', 48, scene);
+    bats.particleTexture = this.batTex(scene);
+    bats.emitter = new BABYLON.Vector3(0, -6, -1);
+    bats.minEmitBox = new BABYLON.Vector3(-24, -10, -2);
+    bats.maxEmitBox = new BABYLON.Vector3(24, 12, 0);
+    bats.color1 = new BABYLON.Color4(0.04, 0.03, 0.05, 0.9);
+    bats.color2 = new BABYLON.Color4(0.06, 0.02, 0.04, 0.85);
+    bats.colorDead = new BABYLON.Color4(0, 0, 0, 0);
+    bats.minSize = 1.4; bats.maxSize = 3.0;
+    bats.minLifeTime = 14; bats.maxLifeTime = 24;
+    bats.emitRate = o.bats / 9;
+    bats.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
+    bats.gravity = new BABYLON.Vector3(0, 0.05, 0);
+    bats.direction1 = new BABYLON.Vector3(-1.2, 0.3, 0);
+    bats.direction2 = new BABYLON.Vector3(1.2, 0.7, 0);
+    bats.minAngularSpeed = -0.4; bats.maxAngularSpeed = 0.4;
+    bats.minEmitPower = 0.25; bats.maxEmitPower = 0.7;
+    bats.updateSpeed = 0.01; bats.start();
+
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener('resize', () => engine.resize());
+    this.engines.push(engine);
+  }
+
+  startSound() {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ac = new Ctx(); this.ac = ac;
+    const master = ac.createGain(); master.gain.value = 0.0001; master.connect(ac.destination);
+    const o1 = ac.createOscillator(); o1.type = 'sine'; o1.frequency.value = 55;
+    const o2 = ac.createOscillator(); o2.type = 'sine'; o2.frequency.value = 58.7;
+    const og = ac.createGain(); og.gain.value = 0.5;
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 220;
+    o1.connect(og); o2.connect(og); og.connect(lp); lp.connect(master);
+    const buf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.5;
+    const noise = ac.createBufferSource(); noise.buffer = buf; noise.loop = true;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = 0.6;
+    const ng = ac.createGain(); ng.gain.value = 0.04;
+    noise.connect(bp); bp.connect(ng); ng.connect(master);
+    o1.start(); o2.start(); noise.start();
+    master.gain.exponentialRampToValueAtTime(0.16, ac.currentTime + 1.2);
+    this.master = master; this.nodes = [o1, o2, noise];
+  }
+  stopSound() {
+    if (!this.ac) return;
+    try { this.master.gain.exponentialRampToValueAtTime(0.0001, this.ac.currentTime + 0.4); } catch (e) {}
+    const ac = this.ac, nodes = this.nodes;
+    setTimeout(() => { try { nodes.forEach(n => n.stop()); ac.close(); } catch (e) {} }, 600);
+    this.ac = null;
+  }
+
+  renderVals() {
+    const on = this.state.soundOn;
+    const ticks = [];
+    for (let i = 0; i < 41; i++) {
+      const major = i % 5 === 0;
+      ticks.push({ h: (major ? 20 : 10) + 'px', bg: major ? 'rgba(233,228,217,.55)' : 'rgba(233,228,217,.22)' });
+    }
+    return {
+      ticks,
+      soundLabel: on ? 'Static On' : 'Static Off',
+      soundDot: on ? '#c8131c' : '#5a534b',
+      toggleSound: () => {
+        const next = !this.state.soundOn;
+        if (next) this.startSound(); else this.stopSound();
+        this.setState({ soundOn: next });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
