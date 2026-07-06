@@ -12,11 +12,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Nosifer&amp;family=Creepster&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 <style>
   html,body{margin:0;padding:0;background:#08070b;overflow:hidden;}
   @keyframes hexFlickerHard{
-    0%,12%,16%,40%,42%,60%,64%,100%{opacity:1;text-shadow:0 0 6px rgba(255,255,255,.35),0 0 26px rgba(200,19,28,.95),0 0 60px rgba(200,19,28,.6),0 0 110px rgba(123,47,176,.7);}
-    14%,41%,62%{opacity:.55;text-shadow:0 0 2px rgba(200,19,28,.3);}
+    0%,12%,16%,40%,42%,60%,64%,100%{opacity:1;text-shadow:0 0 4px rgba(255,255,255,.25),0 0 14px rgba(200,19,28,.5),0 0 32px rgba(200,19,28,.3),0 0 60px rgba(123,47,176,.3);}
+    14%,41%,62%{opacity:.55;text-shadow:0 0 2px rgba(200,19,28,.2);}
     15%{opacity:.15;text-shadow:none;}
   }
   @keyframes emberPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
@@ -55,7 +56,7 @@
 
     
 
-    <h1 style="font-family: 'Nosifer',cursive; color: #0c0a0c; font-size: clamp(52px,12vw,158px); line-height: .84; margin: 0; text-align: center; white-space: nowrap; -webkit-text-stroke: clamp(1.5px,.28vw,3px) #c8131c; animation: hexFlickerHard 4s infinite steps(1,end)" id="hexHero">THE HEXX</h1><div style="flex:1;"></div><div id="hexDesc" style="font-family:'Special Elite',monospace; color:#cfc7bb; font-size:clamp(14px,1.5vw,18px); letter-spacing:.06em; line-height:1.75; max-width:560px; text-align:center; margin:clamp(22px,3vh,34px) 0 0;">KHXX 103.1 FM · independent horror radio. Garage, surf, soul and the strange — tune the dead air and wait for the signal.</div>
+    <h1 style="font-family: 'Nosifer',cursive; color: #0c0a0c; font-size: clamp(52px,12vw,158px); line-height: .84; margin: 0; text-align: center; white-space: nowrap; -webkit-text-stroke: clamp(1.5px,.28vw,3px) #c8131c; animation: hexFlickerHard 4s infinite steps(1,end)" id="hexHero">THE HEX</h1><div style="flex:1;"></div><div id="hexDesc" style="font-family:'Special Elite',monospace; color:#cfc7bb; font-size:clamp(14px,1.5vw,18px); letter-spacing:.06em; line-height:1.75; max-width:560px; text-align:center; margin:clamp(22px,3vh,34px) 0 0;">KHXX 103.1 FM · independent radio. Garage, goth, rebel and the strange &amp; obscure — tune the dead air and wait for the signal.</div>
 
     <div id="hexDial" style="width:100%; max-width:780px; margin-bottom:clamp(20px,3vh,30px);">
       <div style="position:relative; height:46px;">
@@ -103,49 +104,14 @@ class Component extends DCLogic {
   }
 
   waitForBabylon(tries) {
-    if (window.BABYLON && document.getElementById('hexx-canvas')) {
-      try { this.initScene('hexx-canvas', { smoke: 0.8, embers: 1.0, bats: 6, tint: [0.55, 0.1, 0.7] }); } catch (e) {}
+    if (window.BABYLON && window.BABYLON.GLTF2 && document.getElementById('hexx-canvas')) {
+      try { this.initScene('hexx-canvas'); } catch (e) {}
     } else if (tries < 200) {
       setTimeout(() => this.waitForBabylon(tries + 1), 80);
     }
   }
 
-  blobTex(scene) {
-    const c = document.createElement('canvas'); c.width = c.height = 128;
-    const x = c.getContext('2d');
-    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
-    g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(.4, 'rgba(255,255,255,.4)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-    x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-    return new BABYLON.Texture(c.toDataURL(), scene);
-  }
-  emberTex(scene) {
-    const c = document.createElement('canvas'); c.width = c.height = 64;
-    const x = c.getContext('2d');
-    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
-    g.addColorStop(0, 'rgba(255,240,200,1)'); g.addColorStop(.3, 'rgba(255,150,60,.9)'); g.addColorStop(1, 'rgba(255,80,30,0)');
-    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
-    return new BABYLON.Texture(c.toDataURL(), scene);
-  }
-  batTex(scene) {
-    const c = document.createElement('canvas'); c.width = c.height = 128;
-    const x = c.getContext('2d');
-    x.fillStyle = '#000'; x.translate(64, 60);
-    x.beginPath(); x.moveTo(0, -8);
-    x.bezierCurveTo(6, -16, 10, -10, 16, -14);
-    x.bezierCurveTo(34, -26, 52, -18, 60, -6);
-    x.bezierCurveTo(46, -10, 40, -2, 30, -4);
-    x.bezierCurveTo(40, 4, 30, 14, 18, 12);
-    x.bezierCurveTo(10, 11, 6, 6, 0, 10);
-    x.bezierCurveTo(-6, 6, -10, 11, -18, 12);
-    x.bezierCurveTo(-30, 14, -40, 4, -30, -4);
-    x.bezierCurveTo(-40, -2, -46, -10, -60, -6);
-    x.bezierCurveTo(-52, -18, -34, -26, -16, -14);
-    x.bezierCurveTo(-10, -10, -6, -16, 0, -8);
-    x.closePath(); x.fill();
-    return new BABYLON.Texture(c.toDataURL(), scene);
-  }
-
-  initScene(canvasId, o) {
+  initScene(canvasId) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     if (canvas.__hexEngine) return; // already initialised on this canvas node
@@ -156,65 +122,139 @@ class Component extends DCLogic {
     const cam = new BABYLON.FreeCamera('c', new BABYLON.Vector3(0, 0, -34), scene);
     cam.setTarget(BABYLON.Vector3.Zero()); cam.fov = 0.82;
 
-    const smoke = new BABYLON.ParticleSystem('smoke', 600, scene);
-    smoke.particleTexture = this.blobTex(scene);
-    smoke.emitter = new BABYLON.Vector3(0, -16, 0);
-    smoke.minEmitBox = new BABYLON.Vector3(-30, -4, -6);
-    smoke.maxEmitBox = new BABYLON.Vector3(30, 2, 8);
-    smoke.color1 = new BABYLON.Color4(o.tint[0], o.tint[1], o.tint[2], 0.20);
-    smoke.color2 = new BABYLON.Color4(0.22, 0.2, 0.28, 0.16);
-    smoke.colorDead = new BABYLON.Color4(0, 0, 0, 0);
-    smoke.minSize = 9; smoke.maxSize = 22;
-    smoke.minLifeTime = 9; smoke.maxLifeTime = 18;
-    smoke.emitRate = 14 * o.smoke;
-    smoke.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
-    smoke.gravity = new BABYLON.Vector3(0, 0.45, 0);
-    smoke.direction1 = new BABYLON.Vector3(-1.4, 1, 0);
-    smoke.direction2 = new BABYLON.Vector3(1.4, 1.6, 0);
-    smoke.minAngularSpeed = -0.25; smoke.maxAngularSpeed = 0.25;
-    smoke.minEmitPower = 0.3; smoke.maxEmitPower = 0.9;
-    smoke.updateSpeed = 0.012; smoke.start();
+    const hemi = new BABYLON.HemisphericLight('hemi', new BABYLON.Vector3(0, 1, 0), scene);
+    hemi.diffuse = new BABYLON.Color3(0.35, 0.16, 0.42);
+    hemi.groundColor = new BABYLON.Color3(0.05, 0.02, 0.06);
+    hemi.intensity = 0.5;
+    const rim = new BABYLON.DirectionalLight('rim', new BABYLON.Vector3(0.4, -0.3, 1), scene);
+    rim.diffuse = new BABYLON.Color3(0.78, 0.07, 0.11);
+    rim.intensity = 0.6;
 
-    const emb = new BABYLON.ParticleSystem('emb', 400, scene);
-    emb.particleTexture = this.emberTex(scene);
-    emb.emitter = new BABYLON.Vector3(0, -16, 2);
-    emb.minEmitBox = new BABYLON.Vector3(-28, -2, -2);
-    emb.maxEmitBox = new BABYLON.Vector3(28, 0, 4);
-    emb.color1 = new BABYLON.Color4(1, 0.5, 0.18, 0.9);
-    emb.color2 = new BABYLON.Color4(0.85, 0.1, 0.12, 0.8);
-    emb.colorDead = new BABYLON.Color4(0.4, 0.05, 0.05, 0);
-    emb.minSize = 0.12; emb.maxSize = 0.5;
-    emb.minLifeTime = 4; emb.maxLifeTime = 9;
-    emb.emitRate = 26 * o.embers;
-    emb.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
-    emb.gravity = new BABYLON.Vector3(0, 1.1, 0);
-    emb.direction1 = new BABYLON.Vector3(-0.6, 1, 0);
-    emb.direction2 = new BABYLON.Vector3(0.6, 1.5, 0);
-    emb.minEmitPower = 0.5; emb.maxEmitPower = 1.4;
-    emb.updateSpeed = 0.014; emb.start();
+    BABYLON.Effect.ShadersStore['hexNebulaPixelShader'] = `
+      precision highp float;
+      varying vec2 vUV;
+      uniform float time;
+      uniform vec2 resolution;
+      uniform sampler2D textureSampler;
 
-    const bats = new BABYLON.ParticleSystem('bats', 48, scene);
-    bats.particleTexture = this.batTex(scene);
-    bats.emitter = new BABYLON.Vector3(0, -6, -1);
-    bats.minEmitBox = new BABYLON.Vector3(-24, -10, -2);
-    bats.maxEmitBox = new BABYLON.Vector3(24, 12, 0);
-    bats.color1 = new BABYLON.Color4(0.04, 0.03, 0.05, 0.9);
-    bats.color2 = new BABYLON.Color4(0.06, 0.02, 0.04, 0.85);
-    bats.colorDead = new BABYLON.Color4(0, 0, 0, 0);
-    bats.minSize = 1.4; bats.maxSize = 3.0;
-    bats.minLifeTime = 14; bats.maxLifeTime = 24;
-    bats.emitRate = o.bats / 9;
-    bats.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
-    bats.gravity = new BABYLON.Vector3(0, 0.05, 0);
-    bats.direction1 = new BABYLON.Vector3(-1.2, 0.3, 0);
-    bats.direction2 = new BABYLON.Vector3(1.2, 0.7, 0);
-    bats.minAngularSpeed = -0.4; bats.maxAngularSpeed = 0.4;
-    bats.minEmitPower = 0.25; bats.maxEmitPower = 0.7;
-    bats.updateSpeed = 0.01; bats.start();
+      float hash(vec2 p) {
+        p = fract(p * vec2(123.34, 456.21));
+        p += dot(p, p + 45.32);
+        return fract(p.x * p.y);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        float a = hash(i);
+        float b = hash(i + vec2(1.0, 0.0));
+        float c = hash(i + vec2(0.0, 1.0));
+        float d = hash(i + vec2(1.0, 1.0));
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+
+      float fbm(vec2 p) {
+        float v = 0.0;
+        float a = 0.5;
+        mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
+        for (int i = 0; i < 7; ++i) {
+          v += a * noise(p);
+          p = rot * p * 2.0 + vec2(10.0);
+          a *= 0.5;
+        }
+        return v;
+      }
+
+      void main() {
+        vec2 uv = vUV;
+        vec2 p = (uv - 0.5) * 2.0;
+        p.x *= resolution.x / resolution.y;
+        float t = time * 0.15;
+        vec2 q = vec2(fbm(p + vec2(t * 0.2, t * 0.1)), fbm(p + vec2(5.2, 1.3) + t * 0.15));
+        vec2 r = vec2(fbm(p + 4.0 * q + vec2(1.7, 9.2) + 0.15 * t), fbm(p + 4.0 * q + vec2(8.3, 2.8) + 0.126 * t));
+        float f = fbm(p + r);
+        vec3 color = mix(vec3(0.01, 0.0, 0.05), vec3(0.05, 0.01, 0.15), clamp((f*f)*4.0, 0.0, 1.0));
+        color = mix(color, vec3(0.93, 0.17, 0.36), clamp(length(q), 0.0, 1.0) * 0.6);
+        color = mix(color, vec3(0.2, 0.5, 0.8), clamp(length(r.x), 0.0, 1.0) * 0.5);
+        f = pow(f, 1.2);
+        vec3 finalColor = color * f * 1.5;
+        float starHash = hash(p * 150.0);
+        float sizeHash = hash(p * 150.0 + vec2(31.7, 47.3));
+        float starExp = mix(220.0, 900.0, sizeHash);
+        float starBoost = mix(1.6, 0.9, sizeHash);
+        float flicker = 0.8 + 0.2 * sin(time * 2.0 + starHash * 100.0);
+        float stars = pow(starHash, starExp) * starBoost * (1.0 - f * 0.8);
+        finalColor += stars * flicker;
+        vec4 sceneColor = texture2D(textureSampler, vUV);
+        vec3 outColor = mix(finalColor, sceneColor.rgb, sceneColor.a);
+        gl_FragColor = vec4(outColor, 1.0);
+      }
+    `;
+
+    const nebula = new BABYLON.PostProcess('hexNebula', 'hexNebula', ['time', 'resolution'], null, 1.0, cam);
+    nebula.onApply = (effect) => {
+      effect.setFloat('time', performance.now() * 0.001);
+      effect.setFloat2('resolution', engine.getRenderWidth(), engine.getRenderHeight());
+    };
 
     engine.runRenderLoop(() => scene.render());
     window.addEventListener('resize', () => engine.resize());
     this.engines.push(engine);
+
+    this.spawnBats(scene);
+  }
+
+  async spawnBats(scene) {
+    let result;
+    try {
+      result = await BABYLON.SceneLoader.ImportMeshAsync('', './assets/', 'bat.glb', scene);
+    } catch (e) { return; }
+
+    const root = result.meshes[0];
+    const { min, max } = root.getHierarchyBoundingVectors(true);
+    const span = Math.max(max.x - min.x, max.y - min.y, max.z - min.z) || 1;
+    const baseScale = 2.2 / span;
+
+    (result.animationGroups || []).forEach((ag) => ag.play(true));
+
+    const BAT_COUNT = 9;
+    const flights = [];
+    for (let i = 0; i < BAT_COUNT; i++) {
+      const bat = i === 0 ? root : root.clone('bat' + i, null);
+      bat.setEnabled(true);
+      const s = baseScale * (0.7 + Math.random() * 0.7);
+      bat.scaling.set(s, s, s);
+      flights.push({
+        node: bat,
+        cx: (Math.random() - 0.5) * 26,
+        cy: (Math.random() - 0.5) * 16 + 2,
+        cz: (Math.random() - 0.5) * 22 - 4,
+        rx: 5 + Math.random() * 9,
+        rz: 4 + Math.random() * 8,
+        speed: 0.15 + Math.random() * 0.25,
+        phase: Math.random() * Math.PI * 2,
+        bobAmp: 0.6 + Math.random() * 1.2,
+        bobFreq: 0.5 + Math.random() * 0.6,
+        dir: Math.random() < 0.5 ? 1 : -1
+      });
+    }
+
+    scene.onBeforeRenderObservable.add(() => {
+      const t = performance.now() * 0.001;
+      flights.forEach((f) => {
+        const ang = f.dir * f.speed * t + f.phase;
+        const dx = -f.rx * Math.sin(ang) * f.dir;
+        const dz = f.rz * Math.cos(ang) * f.dir;
+        f.node.position.set(
+          f.cx + f.rx * Math.cos(ang),
+          f.cy + f.bobAmp * Math.sin(f.bobFreq * t + f.phase * 1.7),
+          f.cz + f.rz * Math.sin(ang)
+        );
+        f.node.rotation.y = Math.atan2(dx, dz);
+        f.node.rotation.z = Math.sin(t * 6 + f.phase) * 0.25;
+      });
+    });
   }
 
   startSound() {
